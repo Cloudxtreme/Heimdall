@@ -1,4 +1,4 @@
 Heimdall
 ========
 
-jruby menu to open SSH connections 
+A jruby application to display a menu to open SSH connections 
