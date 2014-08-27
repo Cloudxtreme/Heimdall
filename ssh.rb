@@ -18,14 +18,17 @@ class TopFrame < JFrame
     @identity_file = ""
 
     # use putty on windows, gnome on linux and Terminal on mac
-    @islinux = RUBY_PLATFORM.downcase.include?("linux")
-    @ismac = RUBY_PLATFORM.downcase.include?("darwin")
+    @islinux = RbConfig::CONFIG['host_os'].downcase.include?("linux")
+    @ismac = RbConfig::CONFIG['host_os'].downcase.include?("darwin")
 
-    @connect_cmd = '"c:\Program Files\PuTTY\putty.exe" '
+    @connect_cmd_start = '"c:\Program Files\PuTTY\putty.exe" '
+    @connect_cmd_end = ''
     if @islinux
-       @connect_cmd = "gnome-terminal --execute ssh "
+       @connect_cmd_start = "gnome-terminal --execute ssh "
+       @connect_cmd_end = ''
     elsif @ismac
-       @connect_cmd = `osascript -e 'tell application "Terminal" to do script "ssh xxx"'`
+       @connect_cmd_start = 'osascript -e \'tell application "Terminal" to do script "ssh '
+       @connect_cmd_end = '"\''
     end
 
     # save the list of windows created, so garbage collection doesn't kill
@@ -69,15 +72,21 @@ class TopFrame < JFrame
     gridbag.setConstraints(siteLbl, grid)
     contentPane.add(siteLbl)
 
-    descLbl = JLabel.new("host:")
+    hostLbl = JLabel.new("host:")
     grid.gridx = 0
     grid.gridy = 1
+    gridbag.setConstraints(hostLbl, grid)
+    contentPane.add(hostLbl)
+
+    descLbl = JLabel.new("description: ")
+    grid.gridx = 0
+    grid.gridy = 2
     gridbag.setConstraints(descLbl, grid)
     contentPane.add(descLbl)
 
     userLbl = JLabel.new("user:")
     grid.gridx = 0
-    grid.gridy = 2
+    grid.gridy = 3
     gridbag.setConstraints(userLbl, grid)
     contentPane.add(userLbl)
 
@@ -93,7 +102,6 @@ class TopFrame < JFrame
     contentPane.add(@siteCombo)
 
     @siteCombo.add_action_listener do |e|
-      puts "site changed"
       site_change @siteCombo.getSelectedItem()
     end
 
@@ -105,27 +113,35 @@ class TopFrame < JFrame
     contentPane.add(@hostCombo)
 
     @hostCombo.add_action_listener do |e|
-      puts "host changed"
       host_change @hostCombo.getSelectedItem()
     end
 
-    @userCombo = JComboBox.new
+    @desc_dataLbl = JLabel.new(" ")
     grid.gridx = 1
     grid.gridy = 2
+    gridbag.setConstraints(@desc_dataLbl, grid)
+    contentPane.add(@desc_dataLbl)
+
+    @userCombo = JComboBox.new
+    grid.gridx = 1
+    grid.gridy = 3
     grid.gridwidth = 2
     gridbag.setConstraints(@userCombo, grid)
     contentPane.add(@userCombo)
 
     @userCombo.add_action_listener do |e|
-      puts "user changed"
-      user_change (@userCombo.getSelectedItem())
+      user_change @userCombo.getSelectedItem()
     end
 
     @connectBtn = JButton.new("Connect")
     grid.gridx = 0
-    grid.gridy = 3
+    grid.gridy = 4
     gridbag.setConstraints(@connectBtn, grid)
     contentPane.add(@connectBtn)
+
+    @connectBtn.add_action_listener do |e|
+      connect_clicked
+    end
 
     set_default_close_operation(JFrame::EXIT_ON_CLOSE)
 
@@ -151,15 +167,15 @@ class TopFrame < JFrame
       if new_site == session[0]['site']
 
         session[1].each_index do |i|
-          @hostCombo.addItem "#{session[1][i]['desc']} - #{session[1][i]['host']}"
+          @hostCombo.addItem "#{session[1][i]['host']}"
         end
 
       #change the host to the first host setting
-      rval = "#{session[1][0]['desc']} - #{session[1][0]['host']}"
+      rval = "#{session[1][0]['host']}"
+      desc_change("#{session[1][0]['desc']}")
       end
     end
 
-    puts "setting host to #{rval} (#{new_site})"
     host_change(rval)
   end
 
@@ -173,7 +189,7 @@ class TopFrame < JFrame
       if @siteCombo.getSelectedItem() == session[0]['site']
 
         session[1].each_index do |i|
-          if new_host == "#{session[1][i]['desc']} - #{session[1][i]['host']}"
+          if new_host == "#{session[1][i]['host']}"
 
             session[1][i]['users'].each_index do |j|
               @userCombo.addItem session[1][i]['users'][j][0]['user']
@@ -181,23 +197,35 @@ class TopFrame < JFrame
 
             #change the host to the first host setting
             rval = session[1][i]['users'][0][0]['user']
+            desc_change("#{session[1][i]['desc']}")
           end
         end
       end
     end
-    puts "setting user to #{rval} (#{new_host})"
     user_change(rval)
   end
 
+  def desc_change new_desc
+    @desc_dataLbl.setText(new_desc)
+  end
+
   def user_change new_user
-
     @user_name_data = new_user
+  end
 
-    puts "new_user"
-    puts new_user
-    puts "u"
+  def connect_clicked
 
-   end
+    puts "Connect to host"
+
+    ssh_cmd = "#{@connect_cmd_start} #{@identity_file} #{@userCombo.getSelectedItem()}@#{@hostCombo.getSelectedItem()} #{@connect_cmd_end}"
+
+
+    puts ssh_cmd
+
+    thr = Thread.new { `#{ssh_cmd}`}
+
+    @save_sub_process << thr
+  end
 
 
 end
