@@ -7,51 +7,51 @@ sessions:
   - - host: v00server1t
       desc: test server 1
       users:
-        - [user: 'webuser']
+        - [user: 'dwebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'dusername']
     - host: v00server2t
-      desc: test server 1
+      desc: test server 2
       users:
-        - [user: 'webuser']
+        - [user: 'dwebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'dusername']
 - - site: alpha
   - - host: v01server1t
       desc: alpha server 1
       users:
-        - [user: 'webuser']
+        - [user: 'awebuser']
         - [user: 'root']
-        - [user: 'username']
-  - - host: v01server2t
+        - [user: 'ausername']
+    - host: v01server2t
       desc: alpha server 2
       users:
-        - [user: 'webuser']
+        - [user: 'awebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'ausername']
 - - site: beta
   - - host: v02server1t
       desc: beta server 1
       users:
-        - [user: 'webuser']
+        - [user: 'bwebuser']
         - [user: 'root']
-        - [user: 'username']
-  - - host: v02server2t
+        - [user: 'busername']
+    - host: v02server2t
       desc: beta server 2
       users:
-        - [user: 'webuser']
+        - [user: 'bwebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'busername']
 - - site: production
   - - host: v02server1
       desc: production server 1
       users:
-        - [user: 'webuser']
+        - [user: 'pwebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'pusername']
     - host: v02server2
       desc: production server 2
       users:
-        - [user: 'webuser']
+        - [user: 'pwebuser']
         - [user: 'root']
-        - [user: 'username']
+        - [user: 'pusername']
