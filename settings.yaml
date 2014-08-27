@@ -1,0 +1,57 @@
+---
+alwaysontop: 0
+opacity: 0.9
+win_ssh_key: 'c:\ssh\keys\private_key.ppk'
+sessions:
+- - site: development
+  - - host: v00server1t
+      desc: test server 1
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+    - host: v00server2t
+      desc: test server 1
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+- - site: alpha
+  - - host: v01server1t
+      desc: alpha server 1
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+  - - host: v01server2t
+      desc: alpha server 2
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+- - site: beta
+  - - host: v02server1t
+      desc: beta server 1
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+  - - host: v02server2t
+      desc: beta server 2
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+- - site: production
+  - - host: v02server1
+      desc: production server 1
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
+    - host: v02server2
+      desc: production server 2
+      users:
+        - [user: 'webuser']
+        - [user: 'root']
+        - [user: 'username']
