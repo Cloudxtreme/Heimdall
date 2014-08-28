@@ -1,4 +1,4 @@
-require "./lib/NAME.rb"
+require "./lib/heimdall.rb"
 require "test/unit"
 
 class TestHeimdall < Test::Unit::TestCase
