@@ -6,6 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    rake (10.3.2)
 
 PLATFORMS
   java
@@ -13,3 +14,4 @@ PLATFORMS
 
 DEPENDENCIES
   heimdall!
+  rake (= 10.3.2)
