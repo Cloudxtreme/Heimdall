@@ -1,0 +1,14 @@
+PATH
+  remote: .
+  specs:
+    heimdall (0.0.1)
+
+GEM
+  specs:
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  heimdall!
