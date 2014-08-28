@@ -1,4 +1,5 @@
 
+Bundler.require(:default, :development, :test)
 
 require 'rake/testtask'
 
