@@ -1,19 +1,23 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path('../lib/heimdall/version', __FILE__)
 
-Gem::Specification.new do |s|
-  s.name        = 'heimdall'
-  s.version     = Heimdall::VERSION
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ['Mike Canann']
-  s.email       = ['mikecanann@gmail.com']
-  s.homepage    = 'http://github.com/mikecanann/Heimdall'
-  s.summary     = 'SSH connection menu'
-  s.description = 'Provides server and usernames, and creats ssh terminl connections'
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
-#  s.add_dependency 'nokogiri', '1.5.4'                      # An HTML, XML, SAX, and Reader parser
+Gem::Specification.new do |spec|
+  spec.name          = "heimdall"
+  spec.version       = Heimdall::VERSION
+  spec.platform      = Gem::Platform::RUBY
+  spec.authors       = ['Mike Canann']
+  spec.email         = ['mikecanann@gmail.com']
+  spec.summary       = %q{SSH connection menu}
+  spec.description   = %q{Provides server and usernames, and creats ssh terminl connections.}
+  spec.homepage      = "http://github.com/mikecanann/Heimdall"
+  spec.license       = "GPL3"
 
-  s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- {spec,features}/*`.split("\n")
-  s.require_path = 'lib'
+  spec.files         = ['lib/heimdall.rb']
+  spec.executables   = ['heimdall']
+  spec.test_files    = ['tests/test_heimdall.rb']
+  spec.require_paths = ["lib"]
 end
+
