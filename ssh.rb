@@ -5,6 +5,7 @@ require 'java_imports.rb'
 require 'yaml'
 require 'thread'
 
+# main swing window
 class TopFrame < JFrame
   def initialize
     super 'SSH Connections'
@@ -13,24 +14,9 @@ class TopFrame < JFrame
     set_visible(true)
   end
 
-  def init_ui_components
-
+  def init_system_settings
     # default linux setting, uses the keys in the user's .ssh directory
     @identity_file = ''
-
-    # use putty on windows, gnome on linux and Terminal on mac
-    @islinux = RbConfig::CONFIG['host_os'].downcase.include?('linux')
-    @ismac = RbConfig::CONFIG['host_os'].downcase.include?('darwin')
-
-    @connect_cmd_start = '"c:\Program Files\PuTTY\putty.exe" '
-    @connect_cmd_end = ''
-    if @islinux
-      @connect_cmd_start = 'gnome-terminal --execute ssh '
-      @connect_cmd_end = ''
-    elsif @ismac
-      @connect_cmd_start = 'osascript -e \'tell application "Terminal" to do script "ssh '
-      @connect_cmd_end = '"\''
-    end
 
     # save the list of windows created, so garbage collection doesn't kill
     @save_sub_process = []
@@ -46,11 +32,27 @@ class TopFrame < JFrame
       exit
     end
 
-    if !@islinux && !@ismac
+    # use putty on windows, gnome on linux and Terminal on mac
+    @islinux = RbConfig::CONFIG['host_os'].downcase.include?('linux')
+    @ismac = RbConfig::CONFIG['host_os'].downcase.include?('darwin')
+
+    @connect_cmd_start = '"c:\Program Files\PuTTY\putty.exe" '
+    @connect_cmd_end = ''
+    if @islinux
+      @connect_cmd_start = 'gnome-terminal --execute ssh '
+      @connect_cmd_end = ''
+    elsif @ismac
+      @connect_cmd_start = 'osascript -e \'tell application "Terminal" to do script "ssh '
+      @connect_cmd_end = '"\''
+    else
       if @yaml_data['win_ssh_key'].length > 1
         @identity_file = " -i #{@yaml_data['win_ssh_key']} "
       end
     end
+  end
+
+  def init_ui_components
+    init_system_settings
 
     content_pane = getContentPane
     gridbag = GridBagLayout.new
@@ -125,7 +127,7 @@ class TopFrame < JFrame
     content_pane.add(@user_combo)
 
     @user_combo.add_action_listener do |e|
-      user_change @user_combo.getSelectedItem()
+      user_change @user_combo.getSelectedItem
     end
 
     @connect_btn = JButton.new('Connect')
@@ -150,7 +152,6 @@ class TopFrame < JFrame
 
   private
 
-
   def site_change(new_site)
     # remove all the servers for this site
     @host_combo.removeAllItems
@@ -158,16 +159,15 @@ class TopFrame < JFrame
     rval = ''
     # add new items
     @yaml_data['sessions'].each do |session|
-      if new_site == session[0]['site']
+      next unless new_site == session[0]['site']
 
-        session[1].each_index do |i|
-          @host_combo.addItem "#{session[1][i]['host']}"
-        end
-
-        # change the host to the first host setting
-        rval = "#{session[1][0]['host']}"
-        desc_change("#{session[1][0]['desc']}")
+      session[1].each_index do |i|
+        @host_combo.addItem "#{session[1][i]['host']}"
       end
+
+      # change the host to the first host setting
+      rval = "#{session[1][0]['host']}"
+      desc_change("#{session[1][0]['desc']}")
     end
 
     host_change(rval)
@@ -179,20 +179,18 @@ class TopFrame < JFrame
     rval = ''
 
     @yaml_data['sessions'].each do |session|
-      if @site_combo.getSelectedItem == session[0]['site']
+      next unless @site_combo.getSelectedItem == session[0]['site']
 
-        session[1].each_index do |i|
-          if new_host == "#{session[1][i]['host']}"
+      session[1].each_index do |i|
+        next unless new_host == "#{session[1][i]['host']}"
 
-            session[1][i]['users'].each_index do |j|
-              @user_combo.addItem session[1][i]['users'][j][0]['user']
-            end
-
-            # change the host to the first host setting
-            rval = session[1][i]['users'][0][0]['user']
-            desc_change("#{session[1][i]['desc']}")
-          end
+        session[1][i]['users'].each_index do |j|
+          @user_combo.addItem session[1][i]['users'][j][0]['user']
         end
+
+        # change the host to the first host setting
+        rval = session[1][i]['users'][0][0]['user']
+        desc_change("#{session[1][i]['desc']}")
       end
     end
     user_change(rval)
@@ -207,8 +205,6 @@ class TopFrame < JFrame
   end
 
   def connect_clicked
-
-
     ssh_cmd = "#{@connect_cmd_start} #{@identity_file} #{@user_combo.getSelectedItem}@#{@host_combo.getSelectedItem} #{@connect_cmd_end}"
 
     puts "Connect to host #{ssh_cmd}"
