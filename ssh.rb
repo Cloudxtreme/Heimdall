@@ -52,9 +52,9 @@ class TopFrame < JFrame
       end
     end
 
-    contentPane = getContentPane
+    content_pane = getContentPane
     gridbag = GridBagLayout.new
-    contentPane.setLayout gridbag
+    content_pane.setLayout gridbag
 
     grid = GridBagConstraints.new
 
@@ -65,25 +65,25 @@ class TopFrame < JFrame
     grid.gridx = 0
     grid.gridy = 0
     gridbag.setConstraints(site_lbl, grid)
-    contentPane.add(site_lbl)
+    content_pane.add(site_lbl)
 
     host_lbl = JLabel.new('Host:')
     grid.gridx = 0
     grid.gridy = 1
     gridbag.setConstraints(host_lbl, grid)
-    contentPane.add(host_lbl)
+    content_pane.add(host_lbl)
 
     desc_lbl = JLabel.new('Description: ')
     grid.gridx = 0
     grid.gridy = 2
     gridbag.setConstraints(desc_lbl, grid)
-    contentPane.add(desc_lbl)
+    content_pane.add(desc_lbl)
 
     user_lbl = JLabel.new('User:')
     grid.gridx = 0
     grid.gridy = 3
     gridbag.setConstraints(user_lbl, grid)
-    contentPane.add(user_lbl)
+    content_pane.add(user_lbl)
 
     @site_combo = JComboBox.new
     @yaml_data['sessions'].each_index do |i|
@@ -94,7 +94,7 @@ class TopFrame < JFrame
     grid.gridy = 0
     grid.gridwidth = 1
     gridbag.setConstraints(@site_combo, grid)
-    contentPane.add(@site_combo)
+    content_pane.add(@site_combo)
 
     @site_combo.add_action_listener do |e|
       site_change @site_combo.getSelectedItem
@@ -105,7 +105,7 @@ class TopFrame < JFrame
     grid.gridy = 1
     grid.gridwidth = 1
     gridbag.setConstraints(@host_combo, grid)
-    contentPane.add(@host_combo)
+    content_pane.add(@host_combo)
 
     @host_combo.add_action_listener do |e|
       host_change @host_combo.getSelectedItem
@@ -115,14 +115,14 @@ class TopFrame < JFrame
     grid.gridx = 1
     grid.gridy = 2
     gridbag.setConstraints(@desc_data_lbl, grid)
-    contentPane.add(@desc_data_lbl)
+    content_pane.add(@desc_data_lbl)
 
     @user_combo = JComboBox.new
     grid.gridx = 1
     grid.gridy = 3
     grid.gridwidth = 2
     gridbag.setConstraints(@user_combo, grid)
-    contentPane.add(@user_combo)
+    content_pane.add(@user_combo)
 
     @user_combo.add_action_listener do |e|
       user_change @user_combo.getSelectedItem()
@@ -132,7 +132,7 @@ class TopFrame < JFrame
     grid.gridx = 0
     grid.gridy = 4
     gridbag.setConstraints(@connect_btn, grid)
-    contentPane.add(@connect_btn)
+    content_pane.add(@connect_btn)
 
     @connect_btn.add_action_listener do |e|
       connect_clicked
