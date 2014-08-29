@@ -10,7 +10,6 @@ dev
 [![Inline docs](http://inch-ci.org/github/mikecanann/Heimdall.png?branch=dev)](http://inch-ci.org/github/mikecanann/Heimdall)
 
 
-
 A jruby application to display a menu to open SSH connections 
 
 This project uses HoundCI when creating pull requests
