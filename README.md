@@ -1,11 +1,11 @@
 Heimdall
 ========
 
-master
+'master' branch status:
 [![Build Status](https://travis-ci.org/mikecanann/Heimdall.svg?branch=master)](https://travis-ci.org/mikecanann/Heimdall)
 [![Inline docs](http://inch-ci.org/github/mikecanann/Heimdall.png?branch=master)](http://inch-ci.org/github/mikecanann/Heimdall)
 
-dev
+'dev' branch status:
 [![Build Status](https://travis-ci.org/mikecanann/Heimdall.svg?branch=dev)](https://travis-ci.org/mikecanann/Heimdall)
 [![Inline docs](http://inch-ci.org/github/mikecanann/Heimdall.png?branch=dev)](http://inch-ci.org/github/mikecanann/Heimdall)
 
