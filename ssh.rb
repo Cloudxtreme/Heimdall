@@ -14,13 +14,7 @@ class TopFrame < JFrame
     set_visible(true)
   end
 
-  def init_system_settings
-    # default linux setting, uses the keys in the user's .ssh directory
-    @identity_file = ''
-
-    # save the list of windows created, so garbage collection doesn't kill
-    @save_sub_process = []
-
+  def load_yaml
     @config_file_yaml = "#{File.expand_path(File.dirname(__FILE__))}/settings.yaml"
 
     puts @config_file_yaml
@@ -31,17 +25,15 @@ class TopFrame < JFrame
       puts 'yaml file missing'
       exit
     end
+  end
 
+  def ssh_settings
     # use putty on windows, gnome on linux and Terminal on mac
-    @islinux = RbConfig::CONFIG['host_os'].downcase.include?('linux')
-    @ismac = RbConfig::CONFIG['host_os'].downcase.include?('darwin')
-
     @connect_cmd_start = '"c:\Program Files\PuTTY\putty.exe" '
     @connect_cmd_end = ''
-    if @islinux
+    if RbConfig::CONFIG['host_os'].downcase.include?('linux')
       @connect_cmd_start = 'gnome-terminal --execute ssh '
-      @connect_cmd_end = ''
-    elsif @ismac
+    elsif RbConfig::CONFIG['host_os'].downcase.include?('darwin')
       @connect_cmd_start = 'osascript -e \'tell application "Terminal" to do script "ssh '
       @connect_cmd_end = '"\''
     else
@@ -49,6 +41,18 @@ class TopFrame < JFrame
         @identity_file = " -i #{@yaml_data['win_ssh_key']} "
       end
     end
+  end
+
+  def init_system_settings
+    # default linux setting, uses the keys in the user's .ssh directory
+    @identity_file = ''
+
+    # save the list of windows created, so garbage collection doesn't kill
+    @save_sub_process = []
+
+    load_yaml
+
+    ssh_settings
   end
 
   def init_ui_components
@@ -156,7 +160,6 @@ class TopFrame < JFrame
     # remove all the servers for this site
     @host_combo.removeAllItems
 
-    rval = ''
     # add new items
     @yaml_data['sessions'].each do |session|
       next unless new_site == session[0]['site']
@@ -166,17 +169,13 @@ class TopFrame < JFrame
       end
 
       # change the host to the first host setting
-      rval = "#{session[1][0]['host']}"
-      desc_change("#{session[1][0]['desc']}")
+      host_change("#{session[1][0]['host']}")
     end
-
-    host_change(rval)
   end
 
   def host_change(new_host)
     # remove all the users for this server
     @user_combo.removeAllItems
-    rval = ''
 
     @yaml_data['sessions'].each do |session|
       next unless @site_combo.getSelectedItem == session[0]['site']
@@ -189,11 +188,10 @@ class TopFrame < JFrame
         end
 
         # change the host to the first host setting
-        rval = session[1][i]['users'][0][0]['user']
-        desc_change("#{session[1][i]['desc']}")
+        user_change(session[1][i]['users'][0][0]['user'])
+        desc_change(session[1][i]['desc'])
       end
     end
-    user_change(rval)
   end
 
   def desc_change(new_desc)
