@@ -45,6 +45,9 @@ class TopFrame < JFrame
 
   def init_system_settings
     # default linux setting, uses the keys in the user's .ssh directory
+    #
+    # mrc - todo -
+    # create a program to read the .ssh/config and write out the settings.yaml file
     @identity_file = ''
 
     # save the list of windows created, so garbage collection doesn't kill
